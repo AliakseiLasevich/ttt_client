@@ -1,0 +1,14 @@
+.GameThumbnail{
+    border: solid 1px white;
+    margin: 5px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.GameThumbnail:hover {
+    opacity: 70%;
+}
+
+.joinGame {
+    color: coral;
+}

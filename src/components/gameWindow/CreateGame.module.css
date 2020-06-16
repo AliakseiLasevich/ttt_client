@@ -1,0 +1,6 @@
+.createGame{
+    cursor: pointer;
+}
+.createGame:hover{
+    background-color: gray;
+}

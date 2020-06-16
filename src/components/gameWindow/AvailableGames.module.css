@@ -1,0 +1,4 @@
+.AvailableGames{
+    display: flex;
+    flex-wrap: wrap;
+}
