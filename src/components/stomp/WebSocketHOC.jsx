@@ -32,17 +32,25 @@ export class WebSocketHOC extends React.Component {
         this.refreshGamesList();
     };
 
+    notifyPlayerOne = (playerOne) => {
+        this.clientRef.sendMessage(`/user/queue/${playerOne}`, `ATATA`)
+    };
 
-    onMessageReceive = (games, topic) => {
-        debugger
+    onMessageReceive = (message, topic) => {
+
         if (topic === '/topic/findGames') {
-            this.setState(state => ({...state, games: games}))
+            this.setState(state => ({...state, games: message}))
         }
 
         if (topic === '/topic/createGame') {
-            debugger
-            this.setState(state => ({...state, games: [...this.state.games, games]}))
+
+            this.setState(state => ({...state, games: [...this.state.games, message]}))
         }
+
+        // if (topic === '/user/queue/game') {
+        //     this.notifyPlayerOne(message.playerOne);
+        // }
+
     };
 
     render() {
@@ -53,7 +61,10 @@ export class WebSocketHOC extends React.Component {
                                   ['/topic/findGames',
                                       '/queue/player1Game',
                                       '/user/queue',
-                                      '/topic/createGame']}
+                                      '/user/queue/game',
+                                      '/topic/createGame',
+                                      '/user/user/queue/',
+                                  ]}
                               onMessage={this.onMessageReceive}
                               onConnect={this.onConnect}
                               onDisconnect={this.onDisconnect}
