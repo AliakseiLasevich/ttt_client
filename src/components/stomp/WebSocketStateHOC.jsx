@@ -2,11 +2,12 @@ import React from "react";
 import SockJsClient from "react-stomp";
 import App from "../../App";
 
-export class WebSocketHOC extends React.Component {
+export class WebSocketStateHOC extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             games: [],
+            userId: null,
             connected: true,
             opponentId: null,
             topics: ['/topic/findGames',
@@ -46,16 +47,19 @@ export class WebSocketHOC extends React.Component {
     notifyOpponent = () => {
         this.clientRef.sendMessage(`/user/${this.state.opponentId}/queue/notify`,
             JSON.stringify("i'm gonna win you"))
+    };
 
+    move = (move) => {
+        this.clientRef.sendMessage(`/user/${this.state.opponentId}/queue/move`, JSON.stringify(move))
     };
 
     onMessageReceive = (message, topic) => {
+
         if (topic === '/topic/findGames') {
             this.setState(state => ({...state, games: message}))
         }
 
         if (topic === '/topic/createGame') {
-
             this.setState(state => ({...state, games: [...this.state.games, message]}))
         }
 
@@ -68,10 +72,14 @@ export class WebSocketHOC extends React.Component {
             this.setState(state => ({
                 ...state,
                 topics: [...this.state.topics,
-                    `/user/${message}/queue/notify`],
+                    `/user/${message}/queue/notify`,
+                    `/user/${message}/queue/move`],
                 userId: message
             }))
+        }
 
+        if (topic === `/user/${this.state.userId}/queue/move`) {
+            console.log("move by enemy")
         }
     };
 
@@ -90,10 +98,12 @@ export class WebSocketHOC extends React.Component {
                 <App games={this.state.games}
                      refreshGamesList={this.refreshGamesList.bind(this)}
                      createGame={this.createGame.bind(this)}
-                     joinGame={this.joinGame.bind(this)}/>
+                     joinGame={this.joinGame.bind(this)}
+                     opponent={this.state.opponentId}
+                     move={this.move.bind(this)}/>
 
                 <button onClick={() => {
-                    this.notifyOpponent()
+                    this.move();
                 }}>
                     Notify opponent
                 </button>

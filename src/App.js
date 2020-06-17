@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 
 import CreateGame from "./components/gameMenu/CreateGame";
-import Game from "./components/game/Game";
+import GameComponent from "./components/game/GameComponent";
 import AvailableGames from "./components/gameMenu/AvailableGames";
 
 
@@ -20,10 +20,12 @@ const App = (props) => {
                     <AvailableGames games={props.games}
                                     joinGame={props.joinGame}
                                     setInGame={setInGame}
-                                    refreshGamesList={props.refreshGamesList}/>
+                                    refreshGamesList={props.refreshGamesList}
+                    />
                 </div>
                 }
-                {inGame && <Game/>}
+                {inGame && <GameComponent opponent={props.opponent}
+                                          move={props.move}/>}
             </header>
 
         </div>

@@ -1,0 +1,25 @@
+.cell{
+    width: 120px;
+    height: 120px;
+    box-sizing: border-box;
+    background-color: darkgray;
+    border: solid 1px black;
+    padding: 10px;
+    margin: 0 auto;
+}
+
+.cell:hover {
+    background-color: coral;
+}
+
+.disabled {
+    width: 120px;
+    height: 120px;
+    box-sizing: border-box;
+    background-color: darkseagreen;
+    border: solid 1px black;
+    padding: 10px;
+    margin: 0 auto;
+    pointer-events: none;
+    opacity: 0.4;
+}
