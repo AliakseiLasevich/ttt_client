@@ -4,17 +4,20 @@ import style from "./GameThumbnail.module.css";
 
 const GameThumbnail = (props) => {
 
-        return (
-            <div className={style.GameThumbnail} onClick={() => {
-                props.joinGame()
-            }}>
-                <img src={thumbnail}/>
-                <div> {props.tag}</div>
-                <div className={style.joinGame}>Join game</div>
+    return (
+        <div className={style.GameThumbnail} onClick={() => {
+            props.joinGame(props.playerOne);
+            props.setInGame(true);
+            props.refreshGamesList();
+        }}>
+            <img src={thumbnail} alt="game icon"/>
+            <div> tag: {props.tag}</div>
+            <div>p1: {props.playerOne}</div>
+            <div className={style.joinGame}>Join game</div>
 
 
-            </div>
-        );
-    };
+        </div>
+    );
+};
 
 export default GameThumbnail;

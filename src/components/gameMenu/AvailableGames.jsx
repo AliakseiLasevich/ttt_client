@@ -4,9 +4,13 @@ import style from "./AvailableGames.module.css";
 
 const AvailableGames = (props) => {
 
-    let games = props.games.map(game => <GameThumbnail tag={game.tag}
+    let games = props.games.map(game => <GameThumbnail key={game.id}
+                                                       tag={game.tag}
                                                        id={game.id}
-                                                       playerOne={game.playerOne}/>);
+                                                       playerOne={game.playerOne}
+                                                       joinGame={props.joinGame}
+                                                       setInGame={props.setInGame}
+                                                       refreshGamesList={props.refreshGamesList}/>);
 
 
     return (
@@ -14,8 +18,6 @@ const AvailableGames = (props) => {
             <div className={style.AvailableGames}>
                 {games}
             </div>
-            AvailableGames here
-
         </div>
     );
 }

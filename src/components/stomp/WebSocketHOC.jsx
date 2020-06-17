@@ -12,27 +12,34 @@ export class WebSocketHOC extends React.Component {
     }
 
     onConnect = () => {
-        this.clientRef.sendMessage('/app/findGames');
+        this.refreshGamesList();
     };
 
     onDisconnect = () => {
+    };
+
+
+    refreshGamesList = () => {
+        this.clientRef.sendMessage('/app/findGames');
     };
 
     createGame = (game) => {
         this.clientRef.sendMessage('/app/createGame', JSON.stringify(game));
     };
 
-    joinGame = () => {
-
+    joinGame = (playerOneId) => {
+        this.clientRef.sendMessage('/app/joinGame', JSON.stringify(playerOneId));
+        this.refreshGamesList();
     };
 
 
     onMessageReceive = (games, topic) => {
-        if (topic == '/topic/findGames') {
+        debugger
+        if (topic === '/topic/findGames') {
             this.setState(state => ({...state, games: games}))
         }
 
-        if (topic == '/topic/createGame') {
+        if (topic === '/topic/createGame') {
             debugger
             this.setState(state => ({...state, games: [...this.state.games, games]}))
         }
@@ -55,7 +62,9 @@ export class WebSocketHOC extends React.Component {
                               }}/>
 
                 <App games={this.state.games}
-                     createGame={this.createGame.bind(this)}/>
+                     refreshGamesList={this.refreshGamesList.bind(this)}
+                     createGame={this.createGame.bind(this)}
+                     joinGame={this.joinGame.bind(this)}/>
 
             </div>
         )

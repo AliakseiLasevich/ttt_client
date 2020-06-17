@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import './App.css';
 
 import CreateGame from "./components/gameMenu/CreateGame";
-import {Game} from "./components/game/Game";
+import Game from "./components/game/Game";
 import AvailableGames from "./components/gameMenu/AvailableGames";
 
 
@@ -17,7 +17,10 @@ const App = (props) => {
                 <div>
                     <CreateGame createGame={props.createGame}
                                 setInGame={setInGame}/>
-                    <AvailableGames games={props.games}/>
+                    <AvailableGames games={props.games}
+                                    joinGame={props.joinGame}
+                                    setInGame={setInGame}
+                                    refreshGamesList={props.refreshGamesList}/>
                 </div>
                 }
                 {inGame && <Game/>}
