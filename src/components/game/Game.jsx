@@ -1,11 +1,12 @@
 import React from "react";
 
-const Game = () => {
+const Game = (props) => {
 
 
         return (
             <div>
                 GAME HERE
+
             </div>
         );
     }

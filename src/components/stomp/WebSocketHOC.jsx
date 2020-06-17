@@ -7,20 +7,31 @@ export class WebSocketHOC extends React.Component {
         super(props);
         this.state = {
             games: [],
-            connected: true
+            connected: true,
+            opponentId: null,
+            topics: ['/topic/findGames',
+                '/user/queue/getSessionId',
+                '/topic/createGame',
+                '/user/queue/opponent',
+                '/user/queue/sessionId'
+            ]
         }
     }
 
     onConnect = () => {
         this.refreshGamesList();
+        this.getSessionId();
     };
 
     onDisconnect = () => {
     };
 
-
     refreshGamesList = () => {
         this.clientRef.sendMessage('/app/findGames');
+    };
+
+    getSessionId = () => {
+        this.clientRef.sendMessage("/app/getSessionId");
     };
 
     createGame = (game) => {
@@ -32,8 +43,10 @@ export class WebSocketHOC extends React.Component {
         this.refreshGamesList();
     };
 
-    notifyPlayerOne = (playerOne) => {
-        this.clientRef.sendMessage(`/user/queue/${playerOne}`, `ATATA`)
+    notifyOpponent = () => {
+        this.clientRef.sendMessage(`/user/${this.state.opponentId}/queue/notify`,
+            JSON.stringify("i'm gonna win you"))
+
     };
 
     onMessageReceive = (message, topic) => {
@@ -47,7 +60,18 @@ export class WebSocketHOC extends React.Component {
         }
 
         if (topic === '/user/queue/opponent') {
-            console.log(`opponent is: ${message}`)
+            this.setState(state => ({...state, opponentId: message}));
+        }
+
+        if (topic === '/user/queue/sessionId') {
+            // subscribe to game updates and adds user id to state
+            this.setState(state => ({
+                ...state,
+                topics: [...this.state.topics,
+                    `/user/${message}/queue/notify`],
+                userId: message
+            }))
+
         }
     };
 
@@ -55,14 +79,7 @@ export class WebSocketHOC extends React.Component {
         return (
             <div>
                 <SockJsClient url={"http://localhost:8080/handler"}
-                              topics={
-                                  ['/topic/findGames',
-                                      '/queue/player1Game',
-                                      '/user/queue',
-                                      '/user/queue/game',
-                                      '/topic/createGame',
-                                      '/user/queue/opponent',
-                                  ]}
+                              topics={this.state.topics}
                               onMessage={this.onMessageReceive}
                               onConnect={this.onConnect}
                               onDisconnect={this.onDisconnect}
@@ -74,6 +91,12 @@ export class WebSocketHOC extends React.Component {
                      refreshGamesList={this.refreshGamesList.bind(this)}
                      createGame={this.createGame.bind(this)}
                      joinGame={this.joinGame.bind(this)}/>
+
+                <button onClick={() => {
+                    this.notifyOpponent()
+                }}>
+                    Notify opponent
+                </button>
 
             </div>
         )
