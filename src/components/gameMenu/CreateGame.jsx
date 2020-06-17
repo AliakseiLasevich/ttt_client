@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import style from "./CreateGame.module.css";
 import CreateGameForm from "./CreateGameForm";
 
-const CreateGame = () => {
+const CreateGame = (props) => {
 
     const [editMode, setEditMode] = useState(false);
 
@@ -11,10 +11,12 @@ const CreateGame = () => {
             <div className={style.createGame} onClick={() => {
                 setEditMode(!editMode);
             }}>
-                {!editMode && "Create game" }
-                {editMode && "Cancel" }
+                {!editMode && "Create game"}
+                {editMode && "Cancel"}
             </div>
-            {editMode && <CreateGameForm/>}
+            {editMode && <CreateGameForm setInGame={props.setInGame}
+                                         createGame={props.createGame}
+                                         setEditMode={setEditMode}/>}
         </div>
     )
 };
