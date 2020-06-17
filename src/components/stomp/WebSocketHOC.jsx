@@ -37,7 +37,6 @@ export class WebSocketHOC extends React.Component {
     };
 
     onMessageReceive = (message, topic) => {
-
         if (topic === '/topic/findGames') {
             this.setState(state => ({...state, games: message}))
         }
@@ -47,10 +46,9 @@ export class WebSocketHOC extends React.Component {
             this.setState(state => ({...state, games: [...this.state.games, message]}))
         }
 
-        // if (topic === '/user/queue/game') {
-        //     this.notifyPlayerOne(message.playerOne);
-        // }
-
+        if (topic === '/user/queue/opponent') {
+            console.log(`opponent is: ${message}`)
+        }
     };
 
     render() {
@@ -63,7 +61,7 @@ export class WebSocketHOC extends React.Component {
                                       '/user/queue',
                                       '/user/queue/game',
                                       '/topic/createGame',
-                                      '/user/user/queue/',
+                                      '/user/queue/opponent',
                                   ]}
                               onMessage={this.onMessageReceive}
                               onConnect={this.onConnect}
