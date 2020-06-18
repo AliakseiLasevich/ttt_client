@@ -12,6 +12,7 @@
     background-color: coral;
 }
 
+
 .disabled {
     width: 120px;
     height: 120px;
@@ -22,4 +23,22 @@
     margin: 0 auto;
     pointer-events: none;
     opacity: 0.4;
+}
+
+.playerOneValue{
+    background-color: red;
+}
+
+.playerTwoValue{
+    background-color: green;
+}
+
+.touched {
+    width: 120px;
+    height: 120px;
+    box-sizing: border-box;
+    border: solid 1px black;
+    padding: 10px;
+    margin: 0 auto;
+    pointer-events: none;
 }

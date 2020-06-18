@@ -2,11 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import * as serviceWorker from './serviceWorker';
-import {WebSocketStateHOC} from "./components/stomp/WebSocketStateHOC";
+import {WebSocketHOC} from "./components/store/WebSocketHOC";
 
 
 ReactDOM.render(
-    <WebSocketStateHOC/>,
+    <WebSocketHOC/>,
     document.getElementById('root')
 );
 

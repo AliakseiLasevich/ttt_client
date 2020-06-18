@@ -4,3 +4,12 @@
     width: 400px;
     height: 400px;
 }
+
+.disabled {
+    display: flex;
+    flex-wrap: wrap;
+    width: 400px;
+    height: 400px;
+    pointer-events: none;
+    opacity: 0.8;
+}

@@ -25,7 +25,12 @@ const App = (props) => {
                 </div>
                 }
                 {inGame && <GameGrid opponent={props.opponent}
-                                     move={props.move}/>}
+                                     move={props.move}
+                                     userTurn={props.userTurn}
+                                     toggleUserTurn={props.toggleUserTurn}
+                                     moveEquivalent={props.moveEquivalent}
+                                     opponentMoves={props.opponentMoves}
+                                     userMoves={props.userMoves}/>}
             </header>
 
         </div>

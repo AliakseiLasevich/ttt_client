@@ -5,23 +5,28 @@ import style from "./GameGrid.module.css";
 const GameGrid = (props) => {
 
         let gameField = [];
-
         for (let i = 0; i < 9; i++) {
             gameField.push(
                 <Cell id={i}
                       key={i}
-                      value={null}
-                      move={props.move}/>
+                      move={props.move}
+                      toggleUserTurn={props.toggleUserTurn}
+                      moveEquivalent={props.moveEquivalent}
+                      opponentMoves={props.opponentMoves}
+                      userMoves={props.userMoves}/>
             )
         }
 
         return (
             <div>
-                {props.opponent && <div className={style.gameField}>
-                    {gameField}
-                </div>
-                }
+                {props.opponent && <div>
+                    <div className={props.userTurn ? style.gameField : style.disabled}>  {gameField}  </div>
+                    {props.userTurn && "Your turn"}
+                    {!props.userTurn && "Enemy turn"}
+                </div>}
                 {!props.opponent && "Waiting for player 2"}
+
+
             </div>
         );
     }

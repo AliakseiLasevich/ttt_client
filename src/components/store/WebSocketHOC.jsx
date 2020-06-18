@@ -2,23 +2,26 @@ import React from "react";
 import SockJsClient from "react-stomp";
 import App from "../../App";
 
-export class WebSocketStateHOC extends React.Component {
+export class WebSocketHOC extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
             games: [],
             userId: null,
-            // connected: true,
             opponentId: null,
+            userMoves: [],
+            opponentMoves: [],
             currentGameId: null,
             moveEquivalent: null,
+            userTurn: false,
             topics: ['/topic/findGames',
                 '/topic/createGame',
                 '/user/queue/getSessionId',
                 '/user/queue/opponent',
                 '/user/queue/sessionId',
-                '/user/queue/move'
+                '/user/queue/move',
+                '/user/queue/gameOver'
             ]
         }
     }
@@ -41,9 +44,8 @@ export class WebSocketStateHOC extends React.Component {
     };
 
     requestJoinGame = (gameId) => {
-        debugger
         this.clientRef.sendMessage('/app/joinGame', JSON.stringify(gameId));
-        this.setState(state => ({...state, moveEquivalent: 1, currentGameId: gameId}))
+        this.setState(state => ({...state, moveEquivalent: 1, currentGameId: gameId, userTurn: false}))
         this.refreshGamesList();
     };
 
@@ -55,8 +57,15 @@ export class WebSocketStateHOC extends React.Component {
             userId: this.state.userId,
             opponentId: this.state.opponentId
         };
-        debugger
         this.clientRef.sendMessage(`/app/move`, JSON.stringify(moveDto));
+        this.setState(state => ({...state, userMoves: [...this.state.userMoves, cellId]}))
+    };
+
+    requestGameOverNotify = (winnerId) => {
+        let winnerDto = {
+            winnerId
+        };
+        this.clientRef.sendMessage('/app/gameOver', JSON.stringify(winnerDto))
     };
 
     onMessageReceive = (message, topic) => {
@@ -82,6 +91,16 @@ export class WebSocketStateHOC extends React.Component {
         }
 
         if (topic === '/user/queue/move') {
+            if (message.winnerId) {
+                this.requestGameOverNotify(message.winnerId)
+            }
+            let opponentMove = message.opponentCellId;
+            this.setState(state => ({...state, opponentMoves: [...this.state.opponentMoves, opponentMove]}));
+            this.toggleUserTurn();
+            return;
+        }
+
+        if (topic === '/user/queue/gameOver') {
             console.log(message);
             return;
         }
@@ -94,14 +113,13 @@ export class WebSocketStateHOC extends React.Component {
     };
 
     createNewGame = (game) => {
-        debugger
         this.setState(state => ({
             ...state,
             games: [...this.state.games, game],
             currentGameId: game.id,
-            moveEquivalent: 10
+            moveEquivalent: 10,
+            userTurn: true
         }));
-        debugger
     };
 
     setOpponentId = (opponentId) => {
@@ -113,6 +131,10 @@ export class WebSocketStateHOC extends React.Component {
             ...state,
             userId: userId
         }))
+    };
+
+    toggleUserTurn = () => {
+        this.setState(state => ({...state, userTurn: !this.state.userTurn}))
     };
 
 
@@ -132,7 +154,12 @@ export class WebSocketStateHOC extends React.Component {
                      createGame={this.requestCreateGame.bind(this)}
                      joinGame={this.requestJoinGame.bind(this)}
                      opponent={this.state.opponentId}
-                     move={this.requestMove.bind(this)}/>
+                     move={this.requestMove.bind(this)}
+                     userTurn={this.state.userTurn}
+                     toggleUserTurn={this.toggleUserTurn.bind(this)}
+                     moveEquivalent={this.state.moveEquivalent}
+                     opponentMoves={this.state.opponentMoves}
+                     userMoves={this.state.userMoves}/>
 
             </div>
         )
