@@ -3,6 +3,7 @@ import SockJsClient from "react-stomp";
 import App from "../../App";
 
 export class WebSocketStateHOC extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -14,20 +15,18 @@ export class WebSocketStateHOC extends React.Component {
                 '/user/queue/getSessionId',
                 '/topic/createGame',
                 '/user/queue/opponent',
-                '/user/queue/sessionId'
+                '/user/queue/sessionId',
+                '/user/queue/move'
             ]
         }
     }
 
     onConnect = () => {
-        this.refreshGamesList();
+        this.getGamesList();
         this.getSessionId();
     };
 
-    onDisconnect = () => {
-    };
-
-    refreshGamesList = () => {
+    getGamesList = () => {
         this.clientRef.sendMessage('/app/findGames');
     };
 
@@ -44,44 +43,61 @@ export class WebSocketStateHOC extends React.Component {
         this.refreshGamesList();
     };
 
-    notifyOpponent = () => {
-        this.clientRef.sendMessage(`/user/${this.state.opponentId}/queue/notify`,
-            JSON.stringify("i'm gonna win you"))
-    };
 
     move = (move) => {
-        this.clientRef.sendMessage(`/user/${this.state.opponentId}/queue/move`, JSON.stringify(move))
+        let moveDto = {move: move, userId: this.state.userId, opponentId: this.state.opponentId};
+        this.clientRef.sendMessage(`/app/move`, JSON.stringify(moveDto));
     };
 
     onMessageReceive = (message, topic) => {
 
         if (topic === '/topic/findGames') {
-            this.setState(state => ({...state, games: message}))
+            this.refreshGamesList(message);
+            return;
         }
 
         if (topic === '/topic/createGame') {
-            this.setState(state => ({...state, games: [...this.state.games, message]}))
+            this.createNewGame(message);
+            return;
         }
 
         if (topic === '/user/queue/opponent') {
-            this.setState(state => ({...state, opponentId: message}));
+            this.setOpponentId(message);
+            return;
         }
 
         if (topic === '/user/queue/sessionId') {
-            // subscribe to game updates and adds user id to state
-            this.setState(state => ({
-                ...state,
-                topics: [...this.state.topics,
-                    `/user/${message}/queue/notify`,
-                    `/user/${message}/queue/move`],
-                userId: message
-            }))
+            this.setUserId(message);
+            return;
         }
 
-        if (topic === `/user/${this.state.userId}/queue/move`) {
-            console.log("move by enemy")
+        if (topic === '/user/queue/move') {
+            console.log(message);
+            return;
         }
+
+
     };
+
+    refreshGamesList = (games) => {
+        this.setState(state => ({...state, games: games}))
+    };
+
+    createNewGame = (game) => {
+        this.setState(state => ({...state, games: [...this.state.games, game]}))
+    };
+
+    setOpponentId = (opponentId) => {
+        this.setState(state => ({...state, opponentId: opponentId}));
+    };
+
+    setUserId = (userId) => {
+        this.setState(state => ({
+            ...state,
+            userId: userId
+        }))
+    };
+
 
     render() {
         return (
@@ -90,7 +106,6 @@ export class WebSocketStateHOC extends React.Component {
                               topics={this.state.topics}
                               onMessage={this.onMessageReceive}
                               onConnect={this.onConnect}
-                              onDisconnect={this.onDisconnect}
                               ref={(client) => {
                                   this.clientRef = client
                               }}/>
@@ -102,13 +117,7 @@ export class WebSocketStateHOC extends React.Component {
                      opponent={this.state.opponentId}
                      move={this.move.bind(this)}/>
 
-                <button onClick={() => {
-                    this.move();
-                }}>
-                    Notify opponent
-                </button>
-
             </div>
         )
     }
-};
+}
