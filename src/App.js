@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import './App.css';
 
-import CreateGame from "./components/gameMenu/CreateGame";
-import GameComponent from "./components/game/GameComponent";
-import AvailableGames from "./components/gameMenu/AvailableGames";
+import CreateGame from "./components/menu/CreateGame";
+import GameGrid from "./components/game/GameGrid";
+import AvailableGames from "./components/menu/AvailableGames";
 
 
 const App = (props) => {
@@ -24,8 +24,8 @@ const App = (props) => {
                     />
                 </div>
                 }
-                {inGame && <GameComponent opponent={props.opponent}
-                                          move={props.move}/>}
+                {inGame && <GameGrid opponent={props.opponent}
+                                     move={props.move}/>}
             </header>
 
         </div>

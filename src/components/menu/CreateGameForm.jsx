@@ -18,7 +18,7 @@ const CreateGameForm = (props) => {
                     <input type="text" placeholder="Enter tag here" name="tag"
                            ref={register({required: "Tag is required"})}/>
                     <div>  {errors.tag && <span className={style.errorMessage}>{errors.tag.message}</span>}</div>
-                    <input type="submit" value="New GameComponent"/>
+                    <input type="submit" value="New Game!"/>
                 </form>
             </div>
         )

@@ -1,8 +1,8 @@
 import React from "react";
 import Cell from "./Cell";
-import style from "./Game.module.css";
+import style from "./GameGrid.module.css";
 
-const GameComponent = (props) => {
+const GameGrid = (props) => {
 
         let gameField = [];
 
@@ -27,4 +27,4 @@ const GameComponent = (props) => {
     }
 ;
 
-export default GameComponent;
+export default GameGrid;

@@ -22,29 +22,28 @@ export class WebSocketStateHOC extends React.Component {
     }
 
     onConnect = () => {
-        this.getGamesList();
-        this.getSessionId();
+        this.requestGamesList();
+        this.requestSessionId();
     };
 
-    getGamesList = () => {
+    requestGamesList = () => {
         this.clientRef.sendMessage('/app/findGames');
     };
 
-    getSessionId = () => {
+    requestSessionId = () => {
         this.clientRef.sendMessage("/app/getSessionId");
     };
 
-    createGame = (game) => {
+    requestCreateGame = (game) => {
         this.clientRef.sendMessage('/app/createGame', JSON.stringify(game));
     };
 
-    joinGame = (playerOneId) => {
+    requestJoinGame = (playerOneId) => {
         this.clientRef.sendMessage('/app/joinGame', JSON.stringify(playerOneId));
         this.refreshGamesList();
     };
 
-
-    move = (move) => {
+    requestMove = (move) => {
         let moveDto = {move: move, userId: this.state.userId, opponentId: this.state.opponentId};
         this.clientRef.sendMessage(`/app/move`, JSON.stringify(moveDto));
     };
@@ -112,10 +111,10 @@ export class WebSocketStateHOC extends React.Component {
 
                 <App games={this.state.games}
                      refreshGamesList={this.refreshGamesList.bind(this)}
-                     createGame={this.createGame.bind(this)}
-                     joinGame={this.joinGame.bind(this)}
+                     createGame={this.requestCreateGame.bind(this)}
+                     joinGame={this.requestJoinGame.bind(this)}
                      opponent={this.state.opponentId}
-                     move={this.move.bind(this)}/>
+                     move={this.requestMove.bind(this)}/>
 
             </div>
         )
