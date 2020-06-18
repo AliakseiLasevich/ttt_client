@@ -9,11 +9,13 @@ export class WebSocketStateHOC extends React.Component {
         this.state = {
             games: [],
             userId: null,
-            connected: true,
+            // connected: true,
             opponentId: null,
+            currentGameId: null,
+            moveEquivalent: null,
             topics: ['/topic/findGames',
-                '/user/queue/getSessionId',
                 '/topic/createGame',
+                '/user/queue/getSessionId',
                 '/user/queue/opponent',
                 '/user/queue/sessionId',
                 '/user/queue/move'
@@ -38,13 +40,22 @@ export class WebSocketStateHOC extends React.Component {
         this.clientRef.sendMessage('/app/createGame', JSON.stringify(game));
     };
 
-    requestJoinGame = (playerOneId) => {
-        this.clientRef.sendMessage('/app/joinGame', JSON.stringify(playerOneId));
+    requestJoinGame = (gameId) => {
+        debugger
+        this.clientRef.sendMessage('/app/joinGame', JSON.stringify(gameId));
+        this.setState(state => ({...state, moveEquivalent: 1, currentGameId: gameId}))
         this.refreshGamesList();
     };
 
-    requestMove = (move) => {
-        let moveDto = {move: move, userId: this.state.userId, opponentId: this.state.opponentId};
+    requestMove = (cellId) => {
+        let moveDto = {
+            gameId: this.state.currentGameId,
+            cellId: cellId,
+            moveEquivalent: this.state.moveEquivalent,
+            userId: this.state.userId,
+            opponentId: this.state.opponentId
+        };
+        debugger
         this.clientRef.sendMessage(`/app/move`, JSON.stringify(moveDto));
     };
 
@@ -83,7 +94,14 @@ export class WebSocketStateHOC extends React.Component {
     };
 
     createNewGame = (game) => {
-        this.setState(state => ({...state, games: [...this.state.games, game]}))
+        debugger
+        this.setState(state => ({
+            ...state,
+            games: [...this.state.games, game],
+            currentGameId: game.id,
+            moveEquivalent: 10
+        }));
+        debugger
     };
 
     setOpponentId = (opponentId) => {

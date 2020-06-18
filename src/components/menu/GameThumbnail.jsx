@@ -6,7 +6,7 @@ const GameThumbnail = (props) => {
 
     return (
         <div className={style.GameThumbnail} onClick={() => {
-            props.joinGame(props.playerOne);
+            props.joinGame(props.id);
             props.setInGame(true);
             props.refreshGamesList();
         }}>

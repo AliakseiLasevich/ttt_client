@@ -7,7 +7,6 @@ const AvailableGames = (props) => {
     let games = props.games.map(game => <GameThumbnail key={game.id}
                                                        tag={game.tag}
                                                        id={game.id}
-                                                       playerOne={game.playerOne}
                                                        joinGame={props.joinGame}
                                                        setInGame={props.setInGame}
                                                        refreshGamesList={props.refreshGamesList}/>);
