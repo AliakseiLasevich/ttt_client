@@ -18,9 +18,9 @@ const Cell = (props) => {
                  props.toggleUserTurn();
              }}>
 
-            <div className={value === 10 ? style.playerOneValue : null || value == 1 ? style.playerTwoValue : null}>
-                {props.opponentMoves.includes(props.id) && "X"}
-                {props.userMoves.includes(props.id) && "O"}
+            <div>
+                {props.opponentMoves.includes(props.id) && "O"}
+                {props.userMoves.includes(props.id) && "X"}
 
             </div>
         </div>

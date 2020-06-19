@@ -6,7 +6,11 @@ export class WebSocketHOC extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {
+        this.state = this.getInitialState();
+    }
+
+    getInitialState = () => {
+        return {
             games: [],
             userId: null,
             opponentId: null,
@@ -15,16 +19,26 @@ export class WebSocketHOC extends React.Component {
             currentGameId: null,
             moveEquivalent: null,
             userTurn: false,
+            winnerId: null,
+            isTie: null,
             topics: ['/topic/findGames',
                 '/topic/createGame',
                 '/user/queue/getSessionId',
                 '/user/queue/opponent',
                 '/user/queue/sessionId',
                 '/user/queue/move',
-                '/user/queue/gameOver'
+                '/user/queue/gameOver',
+                '/user/queue/tie',
             ]
         }
-    }
+    };
+
+    resetState = () => {
+        debugger
+        this.onConnect();
+        this.setState(this.getInitialState());
+    };
+
 
     onConnect = () => {
         this.requestGamesList();
@@ -61,51 +75,37 @@ export class WebSocketHOC extends React.Component {
         this.setState(state => ({...state, userMoves: [...this.state.userMoves, cellId]}))
     };
 
-    requestGameOverNotify = (winnerId) => {
-        let winnerDto = {
-            winnerId
-        };
-        this.clientRef.sendMessage('/app/gameOver', JSON.stringify(winnerDto))
-    };
-
     onMessageReceive = (message, topic) => {
-
         if (topic === '/topic/findGames') {
             this.refreshGamesList(message);
             return;
         }
-
         if (topic === '/topic/createGame') {
             this.createNewGame(message);
             return;
         }
-
         if (topic === '/user/queue/opponent') {
             this.setOpponentId(message);
             return;
         }
-
         if (topic === '/user/queue/sessionId') {
             this.setUserId(message);
             return;
         }
-
         if (topic === '/user/queue/move') {
-            if (message.winnerId) {
-                this.requestGameOverNotify(message.winnerId)
-            }
             let opponentMove = message.opponentCellId;
             this.setState(state => ({...state, opponentMoves: [...this.state.opponentMoves, opponentMove]}));
             this.toggleUserTurn();
             return;
         }
-
         if (topic === '/user/queue/gameOver') {
-            console.log(message);
+            this.setWinnerId(message.winnerId);
             return;
         }
-
-
+        if (topic === '/user/queue/tie') {
+            this.setTie();
+            return;
+        }
     };
 
     refreshGamesList = (games) => {
@@ -133,10 +133,17 @@ export class WebSocketHOC extends React.Component {
         }))
     };
 
+    setTie = () => {
+        this.setState(state => ({...state, isTie: true}))
+    };
+
     toggleUserTurn = () => {
         this.setState(state => ({...state, userTurn: !this.state.userTurn}))
     };
 
+    setWinnerId = (winnerId) => {
+        this.setState(state => ({...state, winnerId: winnerId}))
+    };
 
     render() {
         return (
@@ -159,7 +166,11 @@ export class WebSocketHOC extends React.Component {
                      toggleUserTurn={this.toggleUserTurn.bind(this)}
                      moveEquivalent={this.state.moveEquivalent}
                      opponentMoves={this.state.opponentMoves}
-                     userMoves={this.state.userMoves}/>
+                     userMoves={this.state.userMoves}
+                     winnerId={this.state.winnerId}
+                     userId={this.state.userId}
+                     isTie={this.state.isTie}
+                     resetState={this.resetState}/>
 
             </div>
         )

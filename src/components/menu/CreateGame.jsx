@@ -1,6 +1,7 @@
 import React, {useState} from "react";
 import style from "./CreateGame.module.css";
 import CreateGameForm from "./CreateGameForm";
+import TagManager from "./TagManager";
 
 const CreateGame = (props) => {
 
@@ -14,9 +15,14 @@ const CreateGame = (props) => {
                 {!editMode && "Create game"}
                 {editMode && "Cancel"}
             </div>
-            {editMode && <CreateGameForm setInGame={props.setInGame}
-                                         createGame={props.createGame}
-                                         setEditMode={setEditMode}/>}
+            {editMode &&
+            <div><CreateGameForm setInGame={props.setInGame}
+                                 createGame={props.createGame}
+                                 setEditMode={setEditMode}/>
+                <TagManager/>
+            </div>
+
+            }
         </div>
     )
 };

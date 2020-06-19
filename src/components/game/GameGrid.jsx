@@ -1,6 +1,7 @@
-import React from "react";
+import React, {useState} from "react";
 import Cell from "./Cell";
 import style from "./GameGrid.module.css";
+import GameOverWindow from "../menu/GameOverWindow";
 
 const GameGrid = (props) => {
 
@@ -19,6 +20,11 @@ const GameGrid = (props) => {
 
         return (
             <div>
+                {(props.winnerId || props.isTie) && <GameOverWindow userId={props.userId}
+                                                                    winnerId={props.winnerId}
+                                                                    setInGame={props.setInGame}
+                                                                    isTie={props.isTie}
+                                                                    resetState={props.resetState}/>}
                 {props.opponent && <div>
                     <div className={props.userTurn ? style.gameField : style.disabled}>  {gameField}  </div>
                     {props.userTurn && "Your turn"}

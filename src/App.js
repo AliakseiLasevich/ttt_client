@@ -4,6 +4,7 @@ import './App.css';
 import CreateGame from "./components/menu/CreateGame";
 import GameGrid from "./components/game/GameGrid";
 import AvailableGames from "./components/menu/AvailableGames";
+import TagManager from "./components/menu/TagManager";
 
 
 const App = (props) => {
@@ -13,6 +14,8 @@ const App = (props) => {
     return (
         <div className="App">
             <header className="App-header">
+
+
                 {!inGame &&
                 <div>
                     <CreateGame createGame={props.createGame}
@@ -30,7 +33,12 @@ const App = (props) => {
                                      toggleUserTurn={props.toggleUserTurn}
                                      moveEquivalent={props.moveEquivalent}
                                      opponentMoves={props.opponentMoves}
-                                     userMoves={props.userMoves}/>}
+                                     userMoves={props.userMoves}
+                                     winnerId={props.winnerId}
+                                     userId={props.userId}
+                                     setInGame={setInGame}
+                                     isTie={props.isTie}
+                                     resetState={props.resetState}/>}
             </header>
 
         </div>
