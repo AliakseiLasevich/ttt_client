@@ -59,7 +59,8 @@ export class WebSocketHOC extends React.Component {
 
     requestJoinGame = (gameId) => {
         this.clientRef.sendMessage('/app/joinGame', JSON.stringify(gameId));
-        this.setState(state => ({...state, moveEquivalent: 1, currentGameId: gameId, userTurn: false}))
+        this.setState(state => ({...state, moveEquivalent: 1, currentGameId: gameId, userTurn: false}));
+        this.requestGamesList();
         this.refreshGamesList();
     };
 
