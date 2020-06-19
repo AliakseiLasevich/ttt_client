@@ -150,8 +150,8 @@ export class WebSocketHOC extends React.Component {
         return (
             <div>
                 <SockJsClient
-                    // url={"http://ec2-3-17-205-220.us-east-2.compute.amazonaws.com:8080/tictactoe/handler"}
-                    url={"http://localhost:8080/handler"}
+                    url={"http://ec2-3-17-205-220.us-east-2.compute.amazonaws.com:8080/tictactoe/handler"}
+                    // url={"http://localhost:8080/handler"}
                     topics={this.state.topics}
                     onMessage={this.onMessageReceive}
                     onConnect={this.onConnect}
