@@ -11,7 +11,7 @@ const GameThumbnail = (props) => {
             props.refreshGamesList();
         }}>
             <img src={thumbnail} alt="game icon"/>
-            <div> tag: {props.tag}</div>
+            <div>{props.name}</div>
             <div className={style.joinGame}>Join game</div>
 
 

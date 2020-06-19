@@ -5,7 +5,7 @@ import style from "./AvailableGames.module.css";
 const AvailableGames = (props) => {
 
     let games = props.games.map(game => <GameThumbnail key={game.id}
-                                                       tag={game.tag}
+                                                       name={game.name}
                                                        id={game.id}
                                                        joinGame={props.joinGame}
                                                        setInGame={props.setInGame}
