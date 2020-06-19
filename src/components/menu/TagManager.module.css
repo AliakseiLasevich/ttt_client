@@ -1,0 +1,10 @@
+.suggestion {
+    font-size: 14px;
+    cursor: pointer;
+    width: auto;
+}
+
+.selectedTag {
+    margin: 3px;
+    background-color: gainsboro;
+}

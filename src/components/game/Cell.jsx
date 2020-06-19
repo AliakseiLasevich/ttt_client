@@ -13,14 +13,13 @@ const Cell = (props) => {
         <div className={touched() ? style.touched : style.cell}
              onClick={() => {
                  setValue(props.moveEquivalent);
-
                  props.move(props.id);
                  props.toggleUserTurn();
              }}>
 
             <div>
-                {props.opponentMoves.includes(props.id) && "O"}
-                {props.userMoves.includes(props.id) && "X"}
+                {props.opponentMoves.includes(props.id) && <span className={style.move}>O</span>}
+                {props.userMoves.includes(props.id) && <span className={style.move}>X</span>}
 
             </div>
         </div>

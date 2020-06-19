@@ -9,5 +9,12 @@
 .form {
     border: solid gray 1px;
     padding: 5px;
-    /*margin: 10px;*/
+}
+
+.react_tags__suggestions {
+    background-color: red;
+}
+
+.tagNote {
+    font-size: 14px;
 }

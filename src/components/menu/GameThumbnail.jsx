@@ -12,9 +12,7 @@ const GameThumbnail = (props) => {
         }}>
             <img src={thumbnail} alt="game icon"/>
             <div>{props.name}</div>
-            <div className={style.joinGame}>Join game</div>
-
-
+            <div className={style.joinGame}>Click to join</div>
         </div>
     );
 };

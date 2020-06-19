@@ -99,6 +99,7 @@ export class WebSocketHOC extends React.Component {
             return;
         }
         if (topic === '/user/queue/gameOver') {
+            debugger
             this.setWinnerId(message.winnerId);
             return;
         }
@@ -148,13 +149,15 @@ export class WebSocketHOC extends React.Component {
     render() {
         return (
             <div>
-                <SockJsClient url={"http://ec2-3-17-205-220.us-east-2.compute.amazonaws.com:8080/tictactoe/handler"}
-                              topics={this.state.topics}
-                              onMessage={this.onMessageReceive}
-                              onConnect={this.onConnect}
-                              ref={(client) => {
-                                  this.clientRef = client
-                              }}/>
+                <SockJsClient
+                    // url={"http://ec2-3-17-205-220.us-east-2.compute.amazonaws.com:8080/tictactoe/handler"}
+                    url={"http://localhost:8080/handler"}
+                    topics={this.state.topics}
+                    onMessage={this.onMessageReceive}
+                    onConnect={this.onConnect}
+                    ref={(client) => {
+                        this.clientRef = client
+                    }}/>
 
                 <App games={this.state.games}
                      refreshGamesList={this.refreshGamesList.bind(this)}

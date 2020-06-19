@@ -1,6 +1,12 @@
-.createGame{
+.createGame {
     cursor: pointer;
 }
-.createGame:hover{
+
+.createGame:hover {
     background-color: gray;
+}
+
+.form {
+    padding: 15px;
+    background-color: lightslategray;
 }
